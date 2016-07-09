@@ -9,6 +9,7 @@ public class RoundedCube : MonoBehaviour {
 
 	private Vector3[] vertices;
 	private Mesh mesh;
+	private Color32[] cubeUV;
 
 	private void Awake () {
 		Generate ();
@@ -21,6 +22,7 @@ public class RoundedCube : MonoBehaviour {
 
 		GenerateVertices ();
 		GenerateTriangles ();
+		GenerateColliders ();
 	}
 
 	private Vector3[] normals;
@@ -34,6 +36,7 @@ public class RoundedCube : MonoBehaviour {
 			(ySize - 1) * (zSize - 1)) * 2;
 		vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
 		normals = new Vector3[vertices.Length];
+		cubeUV = new Color32[vertices.Length];
 
 		int v = 0;
 		for (int y = 0; y <= ySize; y++) {
@@ -68,6 +71,7 @@ public class RoundedCube : MonoBehaviour {
 		}
 		mesh.vertices = vertices;
 		mesh.normals = normals;
+		mesh.colors32 = cubeUV;
 	}
 
 	private void SetVertex (int i, int x, int y, int z) {
@@ -91,23 +95,37 @@ public class RoundedCube : MonoBehaviour {
 
 		normals[i] = (vertices[i] - inner).normalized;
 		vertices[i] = inner + normals[i] * roundness;
+		cubeUV [i] = new Color32 ((byte)x, (byte)y, (byte)z, 0);
 	}
 
 	private void GenerateTriangles () {
-		int quads = (xSize * ySize + xSize * zSize + ySize * zSize) * 2;
-		int[] triangles = new int[quads * 6];
+		int[] trianglesX = new int[(ySize * zSize) * 12];
+		int[] trianglesY = new int[(xSize * zSize) * 12];
+		int[] trianglesZ = new int[(xSize * ySize) * 12];
 		int ring = (xSize + zSize) * 2;
-		int t = 0, v = 0;
+		int tX = 0, tY = 0, tZ = 0, v = 0;
 
 		for (int y = 0; y < ySize; y++, v++) {
-			for (int q = 0; q < ring - 1; q++, v++) {
-				t = SetQuad (triangles, t, v, v + 1, v + ring, v + ring + 1);
+			for (int q = 0; q < xSize; q++, v++) {
+				tZ = SetQuad (trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
 			}
-			t = SetQuad (triangles, t, v, v - ring + 1, v + ring, v + 1);
+			for (int q = 0; q < zSize; q++, v++) {
+				tX = SetQuad (trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
+			}
+			for (int q = 0; q < xSize; q++, v++) {
+				tZ = SetQuad (trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
+			}
+			for (int q = 0; q < zSize - 1; q++, v++) {
+				tX = SetQuad (trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
+			}
+			tX = SetQuad (trianglesX, tX, v, v - ring + 1, v + ring, v + 1);
 		}
-		t = CreateTopFace (triangles, t, ring);
-		t = CreateBottomFace (triangles, t, ring);
-		mesh.triangles = triangles;
+		tY = CreateTopFace (trianglesY, tY, ring);
+		tY = CreateBottomFace (trianglesY, tY, ring);
+		mesh.subMeshCount = 3;
+		mesh.SetTriangles (trianglesX, 0);
+		mesh.SetTriangles (trianglesY, 1);
+		mesh.SetTriangles (trianglesZ, 2);
 	}
 
 	private int CreateTopFace(int[] triangles, int t, int ring) {
@@ -175,6 +193,44 @@ public class RoundedCube : MonoBehaviour {
 		t = SetQuad(triangles, t, vTop, vTop - 1, vMid, vTop - 2);
 
 		return t;
+	}
+
+	private void GenerateColliders () {
+		AddBoxCollider (xSize, ySize - roundness * 2, zSize - roundness * 2);
+		AddBoxCollider (xSize - roundness * 2, ySize, zSize - roundness * 2);
+		AddBoxCollider (xSize - roundness * 2, ySize - roundness * 2, zSize);
+
+		Vector3 min = Vector3.one * roundness;
+		Vector3 half = new Vector3 (xSize, ySize, zSize) * 0.5f;
+		Vector3 max = new Vector3 (xSize, ySize, zSize) - min;
+
+		AddCapsuleCollider (0, half.x, min.y, min.z);
+		AddCapsuleCollider (0, half.x, min.y, max.z);
+		AddCapsuleCollider (0, half.x, max.y, min.z);
+		AddCapsuleCollider (0, half.x, max.y, max.z);
+
+		AddCapsuleCollider(1, min.x, half.y, min.z);
+		AddCapsuleCollider(1, min.x, half.y, max.z);
+		AddCapsuleCollider(1, max.x, half.y, min.z);
+		AddCapsuleCollider(1, max.x, half.y, max.z);
+
+		AddCapsuleCollider(2, min.x, min.y, half.z);
+		AddCapsuleCollider(2, min.x, max.y, half.z);
+		AddCapsuleCollider(2, max.x, min.y, half.z);
+		AddCapsuleCollider(2, max.x, max.y, half.z);
+	}
+
+	private void AddBoxCollider (float x, float y, float z) {
+		BoxCollider c = gameObject.AddComponent<BoxCollider> ();
+		c.size = new Vector3 (x, y, z);
+	}
+
+	private void AddCapsuleCollider (int direction, float x, float y, float z) {
+		CapsuleCollider c = gameObject.AddComponent<CapsuleCollider> ();
+		c.center = new Vector3 (x, y, z);
+		c.direction = direction;
+		c.radius = roundness;
+		c.height = c.center [direction] * 2f;
 	}
 
 	private static int SetQuad (int[] triangles, int i, int v00, int v10, int v01, int v11) {
