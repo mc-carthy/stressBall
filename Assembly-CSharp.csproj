@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{1EA50085-07AA-248B-E0CF-475F4B75F55D}</ProjectGuid>
+    <ProjectGuid>{3B9A54E2-4F8D-DF21-4CC0-58A7FCCE1A24}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -48,6 +48,8 @@
      <Compile Include="Assets\Scripts\CircleGizmo.cs" />
      <Compile Include="Assets\Scripts\CubeSphere.cs" />
      <Compile Include="Assets\Scripts\Grid.cs" />
+     <Compile Include="Assets\Scripts\MeshDeformer.cs" />
+     <Compile Include="Assets\Scripts\MeshDeformerInput.cs" />
      <Compile Include="Assets\Scripts\RoundedCube.cs" />
      <None Include="Assets\Shaders\RoundedCubeGrid.shader" />
  <Reference Include="UnityEngine.UI">

@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{1A22C232-D41E-05E6-6AC3-9A5309ABCFB1}") = "stressBall", "Assembly-CSharp.csproj", "{3B9A54E2-4F8D-DF21-4CC0-58A7FCCE1A24}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B9A54E2-4F8D-DF21-4CC0-58A7FCCE1A24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B9A54E2-4F8D-DF21-4CC0-58A7FCCE1A24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B9A54E2-4F8D-DF21-4CC0-58A7FCCE1A24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B9A54E2-4F8D-DF21-4CC0-58A7FCCE1A24}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal

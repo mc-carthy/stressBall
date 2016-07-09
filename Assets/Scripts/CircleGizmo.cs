@@ -21,7 +21,7 @@ public class CircleGizmo : MonoBehaviour {
 
 	private void ShowPoint (float x, float y) {
 		Vector2 square = new Vector2 (x, y);
-		Vector2 circleNonUni = square.normalized;
+		//Vector2 circleNonUni = square.normalized;
 		Vector2 circle;
 		circle.x = square.x * Mathf.Sqrt (1f - square.y * square.y * 0.5f);
 		circle.y = square.y * Mathf.Sqrt (1f - square.x * square.x * 0.5f);
