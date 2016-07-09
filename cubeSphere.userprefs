@@ -1,8 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CubeSphere.cs">
     <Files>
-      <File FileName="Assets/Scripts/CubeSphere.cs" Line="5" Column="24" />
+      <File FileName="Assets/Scripts/CubeSphere.cs" Line="89" Column="17" />
+      <File FileName="Assets/Scripts/CircleGizmo.cs" Line="27" Column="61" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
